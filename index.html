@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Piyush Bhardwaj">
+    <title>TaleScaper</title>
+    <link rel="icon" href="images.png">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+        }
+        .parallax {
+            height: auto;
+            min-height: 100vh;
+            overflow-x: hidden;
+            overflow-y: visible;
+            perspective: 1px;
+        }
+
+        .parallax__layer {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+        }
+
+        .parallax__layer--back {
+            transform: translateZ(-1px) scale(2);
+            background: linear-gradient(135deg, #3498db, #2980b9, #2c3e50);
+        }
+
+        .parallax__layer--base {
+            transform: translateZ(0);
+            position: relative;
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
+        }
+
+        .content {
+            position: relative;
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        #main-container {
+            display: flex;
+            gap: 20px;
+        }
+        #story-container, #history-container, #story-structure {
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        #story-container {
+            flex: 2;
+        }
+        #history-container, #story-structure {
+            flex: 1;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+        #story-text, #history-text {
+            margin-bottom: 20px;
+        }
+        .btn {
+            padding: 8px 16px;
+            margin: 5px;
+            background-color: rgba(74, 144, 226, 0.7);
+            color: #ffffff;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+
+        .btn:hover {
+            background-color: rgba(74, 144, 226, 0.9);
+        }
+
+        .btn:active {
+            transform: translateY(2px);
+        }
+
+        #mode-toggle, #reset-btn, #share-btn, #load-btn {
+            position: static;
+            display: inline-block;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        #progress-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        #progress {
+            width: 0;
+            height: 100%;
+            background-color: #4CAF50;
+            border-radius: 10px;
+            transition: width 0.5s;
+        }
+        #progress-text {
+            text-align: center;
+            margin-top: 5px;
+        }
+        #final-story {
+            display: none;
+            white-space: pre-wrap;
+        }
+        #file-input {
+            display: none;
+        }
+        .hidden {
+            display: none;
+        }
+        .part-text {
+            width: 100%;
+            height: 100px;
+            margin-bottom: 10px;
+            font-family: 'Poppins', sans-serif;
+        }
+        .choice-input {
+            width: 70%;
+            margin-right: 10px;
+            font-family: 'Poppins', sans-serif;
+        }
+        .next-part-select {
+            width: 20%;
+            font-family: 'Poppins', sans-serif;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        h1 {
+        text-align: center;
+        font-size: 2.5em;
+        font-weight: bold;
+        color: #2c3e50;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        margin: 0;  /* Remove the top and bottom margin */
+        }
+
+        .title-container {
+            position: relative;
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 30px;
+        }
+
+         .author {
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 0.8em;
+        color: #555;
+        font-style: italic;
+        text-decoration: none;
+         }
+
+        .author:hover {
+            text-decoration: underline;
+        }
+
+        .author-preview {
+        display: none;
+        position: absolute;
+        right: 0;
+        top: 100%;
+        background-color: white;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 15px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        z-index: 1000;
+        width: 250px;
+        text-align: left;
+        }
+
+         .author-preview h3 {
+        margin-top: 0;
+         }
+         p{
+            font-size: 13px;
+         }
+    </style>
+</head>
+<body>
+    <div class="parallax">
+        <div class="parallax__layer parallax__layer--back"></div>
+        <div class="parallax__layer parallax__layer--base">
+            <div class="content-wrapper">
+                <div class="content">
+                    <div class="title-container">
+                        <h1>TaleScaper</h1>
+                        <a href="#" class="author" id="author-link">~by Piyush Bhardwaj</a>
+                        <div class="author-preview" id="author-preview">
+                            <h3>About Piyush Bhardwaj</h3>
+                            <p>A 15 year old developer. With the help of this page, you can create complex non-linear stories with limitless possibilities. This page was made through numerous iterations with the help of AI.</p>
+                            <p>GitHub: <a href="https://github.com/CyberGeek121" target="_blank">github.com/CyberGeek121</a></p>
+                            <!-- Add more details as you like -->
+                        </div>
+                    </div>
+                    <div>
+                        <button id="mode-toggle" class="btn">Switch to Play Mode</button>
+                        <button id="reset-btn" class="btn">Reset</button>
+                        <button id="share-btn" class="btn">Share</button>
+                        <button id="load-btn" class="btn">Load</button>
+                        <input type="file" id="file-input" accept=".json">
+                    </div>
+                    
+                    <div id="creator-mode">
+                        <h2>Story Creator Mode</h2>
+                        <div id="story-structure"></div>
+                        <button id="add-part-btn" class="btn">Add New Part</button>
+                        <button id="save-story-btn" class="btn">Save Story</button>
+                    </div>
+
+                    <div id="player-mode" class="hidden">
+                        <h2>Story Player Mode</h2>
+                        <div id="main-container">
+                            <div id="story-container">
+                                <div id="progress-bar"><div id="progress"></div></div>
+                                <div id="progress-text">Part 1</div>
+                                <div id="story-text"></div>
+                                <div id="choices"></div>
+                                <div id="final-story"></div>
+                            </div>
+                            <div id="history-container">
+                                <h3>Interaction History</h3>
+                                <div id="history-text"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const modeToggle = document.getElementById('mode-toggle');
+            const creatorMode = document.getElementById('creator-mode');
+            const playerMode = document.getElementById('player-mode');
+            const storyStructure = document.getElementById('story-structure');
+            const addPartBtn = document.getElementById('add-part-btn');
+            const saveStoryBtn = document.getElementById('save-story-btn');
+            const storyText = document.getElementById('story-text');
+            const choicesContainer = document.getElementById('choices');
+            const progressBar = document.getElementById('progress');
+            const progressText = document.getElementById('progress-text');
+            const finalStory = document.getElementById('final-story');
+            const historyText = document.getElementById('history-text');
+            const resetBtn = document.getElementById('reset-btn');
+            const shareBtn = document.getElementById('share-btn');
+            const loadBtn = document.getElementById('load-btn');
+            const fileInput = document.getElementById('file-input');
+
+            let storyParts = [];
+            let currentPart = 0;
+            let history = [];
+
+            // Creator Mode Functions
+            function addStoryPart() {
+                const partIndex = storyParts.length;
+                const newPart = { text: `Part ${partIndex + 1}`, choices: [] };
+                storyParts.push(newPart);
+                updateStoryStructure();
+            }
+
+            function updateStoryStructure() {
+                storyStructure.innerHTML = storyParts.map((part, index) => `
+                    <div class="story-part">
+                        <h3>Part ${index + 1}</h3>
+                        <textarea class="part-text">${part.text}</textarea>
+                        <div class="choices">
+                            ${part.choices.map((choice, choiceIndex) => `
+                                <div class="choice">
+                                    <input type="text" class="choice-input" value="${choice.text}" data-part="${index}" data-choice="${choiceIndex}">
+                                    <select class="next-part-select" data-part="${index}" data-choice="${choiceIndex}">
+                                        ${storyParts.map((_, i) => `<option value="${i}" ${i === choice.nextPart ? 'selected' : ''}>Part ${i + 1}</option>`).join('')}
+                                    </select>
+                                    <button class="remove-choice-btn btn" data-part="${index}" data-choice="${choiceIndex}">Remove</button>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <button class="add-choice-btn btn" data-part="${index}">Add Choice</button>
+                        <button class="remove-part-btn btn" data-part="${index}">Remove Part</button>
+                    </div>
+                `).join('');
+
+                // Add event listeners for new elements
+                document.querySelectorAll('.part-text').forEach(textarea => {
+                    textarea.addEventListener('change', (e) => {
+                        const partIndex = Array.from(storyStructure.children).indexOf(e.target.closest('.story-part'));
+                        storyParts[partIndex].text = e.target.value;
+                    });
+                });
+
+                document.querySelectorAll('.add-choice-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const partIndex = parseInt(e.target.dataset.part);
+                        storyParts[partIndex].choices.push({ text: 'New Choice', nextPart: partIndex });
+                        updateStoryStructure();
+                    });
+                });
+
+                document.querySelectorAll('.choice-input').forEach(input => {
+                    input.addEventListener('change', (e) => {
+                        const partIndex = parseInt(e.target.dataset.part);
+                        const choiceIndex = parseInt(e.target.dataset.choice);
+                        storyParts[partIndex].choices[choiceIndex].text = e.target.value;
+                    });
+                });
+
+                document.querySelectorAll('.next-part-select').forEach(select => {
+                    select.addEventListener('change', (e) => {
+                        const partIndex = parseInt(e.target.dataset.part);
+                        const choiceIndex = parseInt(e.target.dataset.choice);
+                        storyParts[partIndex].choices[choiceIndex].nextPart = parseInt(e.target.value);
+                    });
+                });
+
+                document.querySelectorAll('.remove-choice-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const partIndex = parseInt(e.target.dataset.part);
+                        const choiceIndex = parseInt(e.target.dataset.choice);
+                        storyParts[partIndex].choices.splice(choiceIndex, 1);
+                        updateStoryStructure();
+                    });
+                });
+
+                document.querySelectorAll('.remove-part-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const partIndex = parseInt(e.target.dataset.part);
+                        storyParts.splice(partIndex, 1);
+                        updateStoryStructure();
+                    });
+                });
+            }
+
+            // Player Mode Functions
+            function updateStory() {
+                const part = storyParts[currentPart];
+                storyText.innerHTML = part.text;
+                choicesContainer.innerHTML = part.choices.map((choice, index) => `
+                    <button class="btn choice-btn" data-choice="${index}">${choice.text}</button>
+                `).join('');
+
+                document.querySelectorAll('.choice-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const choiceIndex = parseInt(e.target.dataset.choice);
+                        history.push(`${part.text} (Choice: ${part.choices[choiceIndex].text})`);
+                        updateHistory();
+                        currentPart = part.choices[choiceIndex].nextPart;
+                        if (currentPart < storyParts.length) {
+                            updateStory();
+                        } else {
+                            endStory();
+                        }
+                    });
+                });
+
+                updateProgress();
+            }
+
+            function updateProgress() {
+                const progress = ((currentPart + 1) / storyParts.length) * 100;
+                progressBar.style.width = `${progress}%`;
+                progressText.textContent = `Part ${currentPart + 1} of ${storyParts.length}`;
+            }
+
+            function updateHistory() {
+                historyText.innerHTML = history.map((item, index) => 
+                    `<p><strong>Interaction ${index + 1}:</strong> ${item}</p>`
+                ).join('');
+            }
+
+            function endStory() {
+                storyText.style.display = 'none';
+                choicesContainer.style.display = 'none';
+                finalStory.style.display = 'block';
+                finalStory.innerHTML = history.join('\n\n');
+            }
+
+            // Save and Load Functions
+            function saveStory() {
+                if (storyParts.length === 0) {
+                    alert('Please add at least one part to the story before saving.');
+                    return;
+                }
+                const storyData = JSON.stringify(storyParts);
+                const blob = new Blob([storyData], {type: 'application/json'});
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'my_interactive_story.json';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                alert('Story saved successfully!');
+            }
+
+            function loadStory(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        try {
+                            storyParts = JSON.parse(e.target.result);
+                            updateStoryStructure();
+                            currentPart = 0;
+                            history = [];
+                            updateStory();
+                            alert('Story loaded successfully!');
+                        } catch (error) {
+                            alert('Error loading story. Please make sure you selected a valid story file.');
+                        }
+                    };
+                    reader.readAsText(file);
+                }
+            }
+
+            function resetStory() {
+    if (confirm('Are you sure you want to reset the story? This action cannot be undone.')) {
+        storyParts = [{ text: 'Start your story here...', choices: [] }];
+        currentPart = 0;
+        history = []; // Clear the history array
+        updateStoryStructure();
+        updateStory();
+        updateHistory(); // Update the history display
+        
+        // Reset the progress bar and text
+        progressBar.style.width = '0%';
+        progressText.textContent = 'Part 1';
+        
+        // Clear the final story display if it's visible
+        finalStory.style.display = 'none';
+        finalStory.innerHTML = '';
+        
+        // Show the story text and choices containers again
+        storyText.style.display = 'block';
+        choicesContainer.style.display = 'block';
+    }
+}
+
+            // Event Listeners
+            modeToggle.addEventListener('click', () => {
+                if (creatorMode.classList.contains('hidden')) {
+                    creatorMode.classList.remove('hidden');
+                    playerMode.classList.add('hidden');
+                    modeToggle.textContent = 'Switch to Play Mode';
+                } else {
+                    creatorMode.classList.add('hidden');
+                    playerMode.classList.remove('hidden');
+                    modeToggle.textContent = 'Switch to Creator Mode';
+                    currentPart = 0;
+                    history = [];
+                    updateStory();
+                }
+            });
+
+            addPartBtn.addEventListener('click', addStoryPart);
+            saveStoryBtn.addEventListener('click', saveStory);
+            resetBtn.addEventListener('click', resetStory);
+            shareBtn.addEventListener('click', saveStory);  // Share is the same as Save in this context
+            loadBtn.addEventListener('click', () => fileInput.click());
+            fileInput.addEventListener('change', loadStory);
+
+            // Initialize
+            storyParts = [{ text: 'Start your story here...', choices: [] }];
+            updateStoryStructure();
+            updateStory();
+        });
+        const authorLink = document.getElementById('author-link');
+        const authorPreview = document.getElementById('author-preview');
+
+        authorLink.addEventListener('mouseenter', () => {
+            authorPreview.style.display = 'block';
+        });
+
+        authorLink.addEventListener('mouseleave', (e) => {
+            setTimeout(() => {
+                if (!authorPreview.matches(':hover')) {
+                    authorPreview.style.display = 'none';
+                }
+            }, 300);
+        });
+
+        authorPreview.addEventListener('mouseleave', () => {
+            authorPreview.style.display = 'none';
+        });
+    </script>
+</body>
+</html>
