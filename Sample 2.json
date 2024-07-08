@@ -1,0 +1,202 @@
+[
+  {
+    "id": 1,
+    "text": "You find yourself in a dimly lit laboratory, surrounded by strange machines and glowing vials. Your head throbs as you try to remember how you got here.",
+    "choices": [
+      {"text": "Examine the nearby computer terminal.", "nextPart": 2},
+      {"text": "Investigate the glowing vials.", "nextPart": 3},
+      {"text": "Try to leave the laboratory.", "nextPart": 4}
+    ]
+  },
+  {
+    "id": 2,
+    "text": "The computer terminal flickers to life as you approach. It displays a warning message about a containment breach in Sector 7.",
+    "choices": [
+      {"text": "Access more information about the breach.", "nextPart": 5},
+      {"text": "Ignore the warning and look for personal files.", "nextPart": 6}
+    ]
+  },
+  {
+    "id": 3,
+    "text": "As you approach the vials, you notice they're labeled with complex formulas. One vial pulses with an otherworldly blue light.",
+    "choices": [
+      {"text": "Drink the glowing blue liquid.", "nextPart": 7},
+      {"text": "Pocket the vial for later.", "nextPart": 8},
+      {"text": "Leave the vials alone and check the computer.", "nextPart": 2}
+    ]
+  },
+  {
+    "id": 4,
+    "text": "You find the laboratory door locked. A keypad next to it requires a 4-digit code.",
+    "choices": [
+      {"text": "Try to guess the code.", "nextPart": 9},
+      {"text": "Look around for clues to the code.", "nextPart": 10},
+      {"text": "Go back and examine the computer terminal.", "nextPart": 2}
+    ]
+  },
+  {
+    "id": 5,
+    "text": "The breach details reveal an experiment gone wrong. A genetically modified creature has escaped and is loose in the facility.",
+    "choices": [
+      {"text": "Search for information on how to contain the creature.", "nextPart": 11},
+      {"text": "Look for evacuation protocols.", "nextPart": 12}
+    ]
+  },
+  {
+    "id": 6,
+    "text": "You find personnel files. One catches your eye - it's your own, but the details don't match your memories.",
+    "choices": [
+      {"text": "Read more about your supposed history.", "nextPart": 13}
+    ]
+  },
+  {
+    "id": 7,
+    "text": "The liquid burns as it goes down. Suddenly, your mind clears and you remember everything. You're a test subject in a secret government program.",
+    "choices": [
+      {"text": "Use your newfound clarity to plan an escape.", "nextPart": 14},
+      {"text": "Confront the scientists responsible.", "nextPart": 15}
+    ]
+  },
+  {
+    "id": 8,
+    "text": "You carefully pocket the vial. As you do, an alarm blares through the facility.",
+    "choices": [
+      {"text": "Hide and wait for the alarm to stop.", "nextPart": 16},
+      {"text": "Use the distraction to try escaping.", "nextPart": 17}
+    ]
+  },
+  {
+    "id": 9,
+    "text": "After several attempts, the keypad flashes red and locks down. You hear footsteps approaching.",
+    "choices": [
+      {"text": "Hide quickly.", "nextPart": 18},
+      {"text": "Prepare to confront whoever is coming.", "nextPart": 19}
+    ]
+  },
+  {
+    "id": 10,
+    "text": "You notice a sticky note under the computer monitor with the numbers 2-7-3-9 written on it.",
+    "choices": [
+      {"text": "Try this code on the door.", "nextPart": 20},
+      {"text": "Check the computer for more information first.", "nextPart": 2}
+    ]
+  },
+  {
+    "id": 11,
+    "text": "The containment protocols involve luring the creature to the cryogenic chamber in Sector 9.",
+    "choices": [
+      {"text": "Head to Sector 9 to prepare the trap.", "nextPart": 21},
+      {"text": "Look for a weapon to defend yourself first.", "nextPart": 22}
+    ]
+  },
+  {
+    "id": 12,
+    "text": "The evacuation protocols are clear: all personnel must report to the helipad on the roof immediately.",
+    "choices": [
+      {"text": "Follow the evacuation protocol.", "nextPart": 23},
+      {"text": "Ignore it and continue investigating.", "nextPart": 24}
+    ]
+  },
+  {
+    "id": 13,
+    "text": "According to the file, you volunteered for a memory alteration experiment. The success rate was only 15%.",
+    "choices": [
+      {"text": "Try to recall your true memories.", "nextPart": 25},
+      {"text": "Look for more information about the experiment.", "nextPart": 26}
+    ]
+  },
+  {
+    "id": 14,
+    "text": "With your enhanced mental clarity, you quickly formulate an escape plan involving the ventilation system.",
+    "choices": [
+      {"text": "Execute your escape plan.", "nextPart": 27}
+    ]
+  },
+  {
+    "id": 15,
+    "text": "You make your way to the main research lab, determined to find answers.",
+    "choices": [
+      {"text": "Demand answers from the lead scientist.", "nextPart": 28},
+      {"text": "Secretly observe the scientists at work.", "nextPart": 29}
+    ]
+  },
+  {
+    "id": 16,
+    "text": "You hide in a supply closet. Through the door, you overhear scientists discussing a 'Phase 2' of the experiment.",
+    "choices": [
+      {"text": "Continue listening.", "nextPart": 30},
+      {"text": "Sneak out and explore while they're distracted.", "nextPart": 31}
+    ]
+  },
+  {
+    "id": 17,
+    "text": "In the chaos of the alarm, you manage to slip into a restricted area. You find yourself in a room full of cryogenic pods.",
+    "choices": [
+      {"text": "Examine the pods closer.", "nextPart": 32},
+      {"text": "Look for an exit.", "nextPart": 33}
+    ]
+  },
+  {
+    "id": 18,
+    "text": "You quickly duck behind some large equipment. A security guard enters, looks around, then leaves.",
+    "choices": [
+      {"text": "Wait a bit longer, then try the door again.", "nextPart": 34},
+      {"text": "Follow the guard discreetly.", "nextPart": 35}
+    ]
+  },
+  {
+    "id": 19,
+    "text": "As you prepare to confront the newcomer, a security guard enters. He looks surprised to see you.",
+    "choices": [
+      {"text": "Try to bluff your way past him.", "nextPart": 36},
+      {"text": "Attempt to overpower the guard.", "nextPart": 37}
+    ]
+  },
+  {
+    "id": 20,
+    "text": "The code works! The door slides open, revealing a long, sterile corridor.",
+    "choices": [
+      {"text": "Explore the corridor to the left.", "nextPart": 38},
+      {"text": "Explore the corridor to the right.", "nextPart": 39}
+    ]
+  },
+  {
+    "id": 21,
+    "text": "You reach Sector 9 and find the cryogenic chamber. A control panel nearby seems to operate it.",
+    "choices": [
+      {"text": "Attempt to activate the chamber.", "nextPart": 40},
+      {"text": "Set up an ambush for the creature.", "nextPart": 41}
+    ]
+  },
+  {
+    "id": 22,
+    "text": "You find a weapons locker, but it's locked with a biometric scanner.",
+    "choices": [
+      {"text": "Look for a way to bypass the scanner.", "nextPart": 42},
+      {"text": "Give up and head to Sector 9 unarmed.", "nextPart": 21}
+    ]
+  },
+  {
+    "id": 23,
+    "text": "You follow the signs to the roof. As you reach the helipad, you see a helicopter preparing for takeoff.",
+    "choices": [
+      {"text": "Run to catch the helicopter.", "nextPart": 43},
+      {"text": "Hide and observe the situation.", "nextPart": 44}
+    ]
+  },
+  {
+    "id": 24,
+    "text": "Ignoring the evacuation order, you continue exploring. You stumble upon a hidden room filled with advanced technology.",
+    "choices": [
+      {"text": "Investigate the strange machines.", "nextPart": 45}
+    ]
+  },
+  {
+    "id": 25,
+    "text": "As you concentrate, flashes of memory return. You remember volunteering for the experiment to save someone important to you.",
+    "choices": [
+      {"text": "Try to remember who you were trying to save.", "nextPart": 46},
+      {"text": "Focus on remembering the details of the experiment.", "nextPart": 47}
+    ]
+  }
+]
