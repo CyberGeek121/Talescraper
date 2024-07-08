@@ -1,0 +1,232 @@
+[
+  {
+    "id": 1,
+    "text": "You wake up in a small, dimly lit room. The air is stale, and you can't remember how you got here. There's a door to your left and a window to your right.",
+    "choices": [
+      {"text": "Try the door", "nextPart": 2},
+      {"text": "Look out the window", "nextPart": 3}
+    ]
+  },
+  {
+    "id": 2,
+    "text": "The door is locked. You notice a keypad next to it, requiring a four-digit code.",
+    "choices": [
+      {"text": "Try to guess the code", "nextPart": 4},
+      {"text": "Look around the room for clues", "nextPart": 5}
+    ]
+  },
+  {
+    "id": 3,
+    "text": "You peer out the window and see you're in a tall building, at least 20 stories high. The city below looks abandoned.",
+    "choices": [
+      {"text": "Try to open the window", "nextPart": 6},
+      {"text": "Go back and examine the door", "nextPart": 2}
+    ]
+  },
+  {
+    "id": 4,
+    "text": "After several failed attempts, the keypad locks you out. A small screen displays: 'Security alerted. Please wait.'",
+    "choices": [
+      {"text": "Wait for security to arrive", "nextPart": 7},
+      {"text": "Look around the room for hiding spots", "nextPart": 8}
+    ]
+  },
+  {
+    "id": 5,
+    "text": "Searching the room, you find a crumpled note under the bed. It reads: 'The code is the year everything changed.'",
+    "choices": [
+      {"text": "Try to decipher the clue", "nextPart": 9},
+      {"text": "Keep searching for more clues", "nextPart": 10}
+    ]
+  },
+  {
+    "id": 6,
+    "text": "The window doesn't budge. It seems to be sealed shut. As you examine it closer, you notice strange markings etched into the glass.",
+    "choices": [
+      {"text": "Try to decipher the markings", "nextPart": 11},
+      {"text": "Go back and examine the door", "nextPart": 2}
+    ]
+  },
+  {
+    "id": 7,
+    "text": "After a few minutes, you hear footsteps approaching. The door opens, and a person in a hazmat suit enters.",
+    "choices": [
+      {"text": "Ask what's going on", "nextPart": 12},
+      {"text": "Try to overpower them and escape", "nextPart": 13}
+    ]
+  },
+  {
+    "id": 8,
+    "text": "You find a small closet and hide inside. Through the slats, you see two people in hazmat suits enter the room.",
+    "choices": [
+      {"text": "Stay hidden and listen", "nextPart": 14},
+      {"text": "Reveal yourself and demand answers", "nextPart": 15}
+    ]
+  },
+  {
+    "id": 9,
+    "text": "You ponder the clue. Could it be referring to a significant event? You decide to try the year 2020.",
+    "choices": [
+      {"text": "Enter 2020 into the keypad", "nextPart": 16}
+    ]
+  },
+  {
+    "id": 10,
+    "text": "Searching further, you find a small diary hidden in a crack in the wall. Most pages are blank, but one entry catches your eye.",
+    "choices": [
+      {"text": "Read the diary entry", "nextPart": 17}
+    ]
+  },
+  {
+    "id": 11,
+    "text": "The markings seem to be a series of symbols. As you study them, you realize they might be some kind of code.",
+    "choices": [
+      {"text": "Try to match the symbols to letters", "nextPart": 18},
+      {"text": "Look for similar symbols in the room", "nextPart": 19}
+    ]
+  },
+  {
+    "id": 12,
+    "text": "The person seems surprised by your question. 'You... you're awake? How much do you remember?'",
+    "choices": [
+      {"text": "Tell them you don't remember anything", "nextPart": 20},
+      {"text": "Demand to know where you are", "nextPart": 21}
+    ]
+  },
+  {
+    "id": 13,
+    "text": "You lunge at the person, but they're quicker. They dodge and pull out a strange-looking device.",
+    "choices": [
+      {"text": "Try to grab the device", "nextPart": 22},
+      {"text": "Back away and apologize", "nextPart": 23}
+    ]
+  },
+  {
+    "id": 14,
+    "text": "You overhear their conversation. 'Subject 47 is still unresponsive. Should we proceed to phase 2?'",
+    "choices": [
+      {"text": "Continue listening", "nextPart": 24}
+    ]
+  },
+  {
+    "id": 15,
+    "text": "You step out of the closet, startling the two people. 'Who are you? What is this place?'",
+    "choices": [
+      {"text": "Listen to their explanation", "nextPart": 25}
+    ]
+  },
+  {
+    "id": 16,
+    "text": "The keypad beeps and the door unlocks. You step into a long, sterile corridor.",
+    "choices": [
+      {"text": "Go left down the corridor", "nextPart": 26},
+      {"text": "Go right down the corridor", "nextPart": 27}
+    ]
+  },
+  {
+    "id": 17,
+    "text": "The diary entry reads: 'Day 365 of the experiment. The outside world is no more. 2024 will be remembered as the year everything changed.'",
+    "choices": [
+      {"text": "Try 2024 on the keypad", "nextPart": 28}
+    ]
+  },
+  {
+    "id": 18,
+    "text": "After some trial and error, you decipher a message: 'The key lies in the stars.'",
+    "choices": [
+      {"text": "Look for star-related clues in the room", "nextPart": 29},
+      {"text": "Try to relate this to the keypad", "nextPart": 30}
+    ]
+  },
+  {
+    "id": 19,
+    "text": "You find similar symbols carved into the bedpost. They seem to form a sequence.",
+    "choices": [
+      {"text": "Try to understand the sequence", "nextPart": 31}
+    ]
+  },
+  {
+    "id": 20,
+    "text": "The person nods solemnly. 'I see. Come with me, we have a lot to discuss.'",
+    "choices": [
+      {"text": "Follow them", "nextPart": 32},
+      {"text": "Refuse to go", "nextPart": 33}
+    ]
+  },
+  {
+    "id": 21,
+    "text": "They hesitate before responding. 'You're in a safe place. The last safe place on Earth.'",
+    "choices": [
+      {"text": "Ask what happened to Earth", "nextPart": 34},
+      {"text": "Demand to be let out", "nextPart": 35}
+    ]
+  },
+  {
+    "id": 22,
+    "text": "You manage to grab the device, but as soon as you touch it, a jolt of electricity courses through you. Everything goes black.",
+    "choices": [
+      {"text": "Wake up", "nextPart": 36}
+    ]
+  },
+  {
+    "id": 23,
+    "text": "They lower the device, still wary. 'I understand your confusion. Let me explain.'",
+    "choices": [
+      {"text": "Listen to their explanation", "nextPart": 37}
+    ]
+  },
+  {
+    "id": 24,
+    "text": "The other person responds, 'No, we need to wait. The Director wants to be present for phase 2.'",
+    "choices": [
+      {"text": "Keep hiding and listening", "nextPart": 38},
+      {"text": "Reveal yourself", "nextPart": 39}
+    ]
+  },
+  {
+    "id": 25,
+    "text": "They exchange glances before one speaks. 'You're part of humanity's last hope. We're in the year 2075, and the world outside is gone.'",
+    "choices": [
+      {"text": "Ask about the world outside", "nextPart": 40},
+      {"text": "Ask about your role", "nextPart": 41}
+    ]
+  },
+  {
+    "id": 26,
+    "text": "You walk down the left corridor and come to a large metal door marked 'Laboratory'.",
+    "choices": [
+      {"text": "Try to open the door", "nextPart": 42},
+      {"text": "Look for another way", "nextPart": 43}
+    ]
+  },
+  {
+    "id": 27,
+    "text": "The right corridor leads to an elevator. The only button is for the ground floor.",
+    "choices": [
+      {"text": "Take the elevator", "nextPart": 44},
+      {"text": "Go back and try the left corridor", "nextPart": 26}
+    ]
+  },
+  {
+    "id": 28,
+    "text": "The keypad accepts the code. The door opens to reveal a high-tech laboratory filled with strange equipment.",
+    "choices": [
+      {"text": "Explore the laboratory", "nextPart": 45},
+      {"text": "Look for an exit", "nextPart": 46}
+    ]
+  },
+  {
+    "id": 29,
+    "text": "You notice a small telescope in the corner of the room that you hadn't seen before.",
+    "choices": [
+      {"text": "Examine the telescope", "nextPart": 47}
+    ]
+  },
+  {
+    "id": 30,
+    "text": "You wonder if the keypad might accept star constellations as numbers. The Big Dipper has 7 stars...",
+    "choices": [
+      {"text": "Try entering 7 into the keypad", "nextPart": 48}
+    ]
+  }
+]
