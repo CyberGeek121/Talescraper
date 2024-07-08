@@ -681,7 +681,7 @@ body.dark-mode .btn:hover {
 
             darkModeToggle.addEventListener('click', () => {
                 body.classList.toggle('dark-mode');
-                darkModeToggle.textContent = body.classList.contains('dark-mode') ? '☀️' : '🌙';
+                darkModeToggle.textContent = body.classList.contains('dark-mode') ? '☀️' : '🌒';
                 localStorage.setItem('darkMode', body.classList.contains('dark-mode'));
             });
 
@@ -690,7 +690,7 @@ body.dark-mode .btn:hover {
                 body.classList.add('dark-mode');
                 darkModeToggle.textContent = '☀️';
             } else {
-                darkModeToggle.textContent = '🌙';
+                darkModeToggle.textContent = '🌒';
             }
 
             // ... (rest of the JavaScript code) ...
