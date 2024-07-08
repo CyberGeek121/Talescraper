@@ -681,7 +681,7 @@ body.dark-mode .btn:hover {
 
             darkModeToggle.addEventListener('click', () => {
                 body.classList.toggle('dark-mode');
-                darkModeToggle.textContent = body.classList.contains('dark-mode') ? '☀️' : '🌑';
+                darkModeToggle.textContent = body.classList.contains('dark-mode') ? '☀️' : '🌙';
                 localStorage.setItem('darkMode', body.classList.contains('dark-mode'));
             });
 
