@@ -362,6 +362,64 @@ body.dark-mode .content {
 body.dark-mode .btn:hover {
     background-color: rgba(90, 90, 90, 0.8);  /* Slightly darker on hover in dark mode */
 }
+.player-controls {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        #toggle-progress {
+            font-size: 0.9em;
+            color: var(--interactive-normal);
+            cursor: pointer;
+            margin-right: 10px;
+            transition: color 0.3s ease;
+        }
+
+        #toggle-progress:hover {
+            color: var(--interactive-hover);
+        }
+
+        #replay-story {
+            background-color: rgba(50, 71, 205, 0.7);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        #replay-story:hover {
+            background-color: rgba(50, 205, 50, 0.8);
+        }
+
+        #replay-story:active {
+            transform: scale(0.95);
+        }
+
+        .dark-mode #toggle-progress {
+            color: var(--interactive-normal);
+        }
+
+        .dark-mode #toggle-progress:hover {
+            color: var(--interactive-hover);
+        }
+
+        .dark-mode #replay-story {
+            background-color: rgba(28, 48, 121, 0.5);
+        }
+
+        .dark-mode #replay-story:hover {
+            background-color: rgba(63, 95, 211, 0.4);
+        }
 
     </style>
 </head>
@@ -375,15 +433,15 @@ body.dark-mode .btn:hover {
                         <h1>TaleScaper<a class="reload" href="https://cybergeek121.github.io/Talescraper/" style="color: #2980b9; text-decoration: none;">.</a></h1>
                         <a href="#" class="author" id="author-link">~by Piyush Bhardwaj</a>
                         <div class="author-preview" id="author-preview">
-                            <h3>About This Page</h3>
-                            <p>This was made by a 15 year old developer. With the help of this page, you can create complex non-linear stories with limitless possibilities. This page was made through numerous iterations with the help of AI. It may be overwhelming currently, but many updates are on the way.</p>
+                            <h3>About Piyush Bhardwaj</h3>
+                            <p>A 15 year old developer. With the help of this page, you can create complex non-linear stories with limitless possibilities. This page was made through numerous iterations with the help of AI. It may be overwhelming currently, but updates are on the way.</p>
                             <p>GitHub: <a href="https://github.com/CyberGeek121" target="_blank">github.com/CyberGeek121</a></p>
                         </div>
                     </div>
                     <div>
                         <button id="mode-toggle" class="btn">Switch to Play Mode</button>
                         <button id="reset-btn" class="btn">Reset</button>
-                        <button id="share-btn" class="btn">Share</button>
+                        <button id="save-btn" class="btn">Save</button>
                         <button id="load-btn" class="btn">Load</button>
                         <button id="dark-mode-toggle" class="dark-mode-btn">🌙</button>
                         <input type="file" id="file-input" accept=".json">
@@ -393,15 +451,20 @@ body.dark-mode .btn:hover {
                         <h2>Story Creator Mode</h2>
                         <div id="story-structure"></div>
                         <button id="add-part-btn" class="btn">Add New Part</button>
-                        <button id="save-story-btn" class="btn">Save Story</button>
                     </div>
 
                     <div id="player-mode" class="hidden">
                         <h2>Story Player Mode</h2>
+                        <div class="player-controls">
+                            <span id="toggle-progress">Show Progress</span>
+                            <button id="replay-story" title="Replay Story">↺</button>
+                        </div>
                         <div id="main-container">
                             <div id="story-container">
-                                <div id="progress-bar"><div id="progress"></div></div>
-                                <div id="progress-text">Part 1</div>
+                                <div id="progress-container" style="display: none;">
+                                    <div id="progress-bar"><div id="progress"></div></div>
+                                    <div id="progress-text">Part 1</div>
+                                </div>
                                 <div id="story-text"></div>
                                 <div id="choices"></div>
                                 <div id="final-story"></div>
@@ -411,290 +474,263 @@ body.dark-mode .btn:hover {
                                 <div id="history-text"></div>
                             </div>
                         </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const modeToggle = document.getElementById('mode-toggle');
-            const creatorMode = document.getElementById('creator-mode');
-            const playerMode = document.getElementById('player-mode');
-            const storyStructure = document.getElementById('story-structure');
-            const addPartBtn = document.getElementById('add-part-btn');
-            const saveStoryBtn = document.getElementById('save-story-btn');
-            const storyText = document.getElementById('story-text');
-            const choicesContainer = document.getElementById('choices');
-            const progressBar = document.getElementById('progress');
-            const progressText = document.getElementById('progress-text');
-            const finalStory = document.getElementById('final-story');
-            const historyText = document.getElementById('history-text');
-            const resetBtn = document.getElementById('reset-btn');
-            const shareBtn = document.getElementById('share-btn');
-            const loadBtn = document.getElementById('load-btn');
-            const fileInput = document.getElementById('file-input');
+    // DOM Elements
+    const modeToggle = document.getElementById('mode-toggle');
+    const creatorMode = document.getElementById('creator-mode');
+    const playerMode = document.getElementById('player-mode');
+    const storyStructure = document.getElementById('story-structure');
+    const addPartBtn = document.getElementById('add-part-btn');
+    const saveBtn = document.getElementById('save-btn');
+    const storyText = document.getElementById('story-text');
+    const choicesContainer = document.getElementById('choices');
+    const progressBar = document.getElementById('progress');
+    const progressText = document.getElementById('progress-text');
+    const finalStory = document.getElementById('final-story');
+    const historyText = document.getElementById('history-text');
+    const resetBtn = document.getElementById('reset-btn');
+    const loadBtn = document.getElementById('load-btn');
+    const fileInput = document.getElementById('file-input');
+    const darkModeToggle = document.getElementById('dark-mode-toggle');
+    const toggleProgressBtn = document.getElementById('toggle-progress');
+    const progressContainer = document.getElementById('progress-container');
+    const replayBtn = document.getElementById('replay-story');
 
-            let storyParts = [];
-            let currentPart = 0;
-            let history = [];
+    // State
+    let storyParts = [{ text: '', choices: [] }];
+    let currentPart = 0;
+    let history = [];
 
-            // Creator Mode Functions
-            function addStoryPart() {
-                const partIndex = storyParts.length;
-                const newPart = { text: '', choices: [] };
-                storyParts.push(newPart);
-                updateStoryStructure();
-            }
-
-            function updateStoryStructure() {
-                storyStructure.innerHTML = storyParts.map((part, index) => `
-                    <div class="story-part">
-                        <h3>Part ${index + 1}</h3>
-                        <textarea class="part-text" placeholder="Start your story here...">${part.text}</textarea>
-                        <div class="choices">
-                            ${part.choices.map((choice, choiceIndex) => `
-                                <div class="choice">
-                                    <input type="text" class="choice-input" placeholder="New Choice" value="${choice.text}" data-part="${index}" data-choice="${choiceIndex}">
-                                    <select class="next-part-select" data-part="${index}" data-choice="${choiceIndex}">
-                                        ${storyParts.map((_, i) => `<option value="${i}" ${i === choice.nextPart ? 'selected' : ''}>Part ${i + 1}</option>`).join('')}
-                                    </select>
-                                    <button class="remove-choice-btn btn" data-part="${index}" data-choice="${choiceIndex}">Remove</button>
-                                </div>
-                            `).join('')}
+    // Functions
+    function updateStoryStructure() {
+        storyStructure.innerHTML = storyParts.map((part, index) => `
+            <div class="story-part">
+                <h3>Part ${index + 1}</h3>
+                <textarea class="part-text" placeholder="Enter your story part here...">${part.text}</textarea>
+                <div class="choices">
+                    ${part.choices.map((choice, choiceIndex) => `
+                        <div class="choice">
+                            <input type="text" class="choice-input" placeholder="Enter choice text" value="${choice.text}" data-part="${index}" data-choice="${choiceIndex}">
+                            <select class="next-part-select" data-part="${index}" data-choice="${choiceIndex}">
+                                ${storyParts.map((_, i) => `<option value="${i}" ${i === choice.nextPart ? 'selected' : ''}>Part ${i + 1}</option>`).join('')}
+                            </select>
+                            <button class="remove-choice-btn btn" data-part="${index}" data-choice="${choiceIndex}">Remove Choice</button>
                         </div>
-                        <button class="add-choice-btn btn" data-part="${index}">Add Choice</button>
-                        <button class="remove-part-btn btn" data-part="${index}">Remove Part</button>
-                    </div>
-                `).join('');
+                    `).join('')}
+                </div>
+                <button class="add-choice-btn btn" data-part="${index}">Add Choice</button>
+                <button class="remove-part-btn btn" data-part="${index}">Remove Part</button>
+            </div>
+        `).join('');
 
-                // Add event listeners for new elements
-                document.querySelectorAll('.part-text').forEach(textarea => {
-                    textarea.addEventListener('change', (e) => {
-                        const partIndex = Array.from(storyStructure.children).indexOf(e.target.closest('.story-part'));
-                        storyParts[partIndex].text = e.target.value;
-                    });
-                });
+        addStoryPartEventListeners();
+    }
 
-                document.querySelectorAll('.add-choice-btn').forEach(btn => {
-                    btn.addEventListener('click', (e) => {
-                        const partIndex = parseInt(e.target.dataset.part);
-                        storyParts[partIndex].choices.push({ text: '', nextPart: partIndex });
-                        updateStoryStructure();
-                    });
-                });
+    function addStoryPartEventListeners() {
+        document.querySelectorAll('.part-text').forEach(textarea => {
+            textarea.addEventListener('change', (e) => {
+                const partIndex = Array.from(storyStructure.children).indexOf(e.target.closest('.story-part'));
+                storyParts[partIndex].text = e.target.value;
+            });
+        });
 
-                document.querySelectorAll('.choice-input').forEach(input => {
-                    input.addEventListener('change', (e) => {
-                        const partIndex = parseInt(e.target.dataset.part);
-                        const choiceIndex = parseInt(e.target.dataset.choice);
-                        storyParts[partIndex].choices[choiceIndex].text = e.target.value;
-                    });
-                });
+        document.querySelectorAll('.add-choice-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const partIndex = parseInt(e.target.dataset.part);
+                storyParts[partIndex].choices.push({ text: '', nextPart: partIndex });
+                updateStoryStructure();
+            });
+        });
 
-                document.querySelectorAll('.next-part-select').forEach(select => {
-                    select.addEventListener('change', (e) => {
-                        const partIndex = parseInt(e.target.dataset.part);
-                        const choiceIndex = parseInt(e.target.dataset.choice);
-                        storyParts[partIndex].choices[choiceIndex].nextPart = parseInt(e.target.value);
-                    });
-                });
-
-                document.querySelectorAll('.remove-choice-btn').forEach(btn => {
-                    btn.addEventListener('click', (e) => {
-                        const partIndex = parseInt(e.target.dataset.part);
-                        const choiceIndex = parseInt(e.target.dataset.choice);
-                        storyParts[partIndex].choices.splice(choiceIndex, 1);
-                        updateStoryStructure();
-                    });
-                });
-
-                document.querySelectorAll('.remove-part-btn').forEach(btn => {
-                    btn.addEventListener('click', (e) => {
-                        const partIndex = parseInt(e.target.dataset.part);
-                        storyParts.splice(partIndex, 1);
-                        updateStoryStructure();
-                    });
-                });
-            }
-
-
-            // Player Mode Functions
-            function updateStory() {
-                const part = storyParts[currentPart];
-                storyText.innerHTML = part.text;
-                choicesContainer.innerHTML = part.choices.map((choice, index) => `
-                    <button class="btn choice-btn" data-choice="${index}">${choice.text}</button>
-                `).join('');
-
-                document.querySelectorAll('.choice-btn').forEach(btn => {
-                    btn.addEventListener('click', (e) => {
-                        const choiceIndex = parseInt(e.target.dataset.choice);
-                        history.push(`${part.text} (Choice: ${part.choices[choiceIndex].text})`);
-                        updateHistory();
-                        currentPart = part.choices[choiceIndex].nextPart;
-                        if (currentPart < storyParts.length) {
-                            updateStory();
-                        } else {
-                            endStory();
-                        }
-                    });
-                });
-
-                updateProgress();
-            }
-
-            function updateProgress() {
-                const progress = ((currentPart + 1) / storyParts.length) * 100;
-                progressBar.style.width = `${progress}%`;
-                progressText.textContent = `Part ${currentPart + 1} of ${storyParts.length}`;
-            }
-
-            function updateHistory() {
-                historyText.innerHTML = history.map((item, index) => 
-                    `<p><strong>Interaction ${index + 1}:</strong> ${item}</p>`
-                ).join('');
-            }
-
-            function endStory() {
-                storyText.style.display = 'none';
-                choicesContainer.style.display = 'none';
-                finalStory.style.display = 'block';
-                finalStory.innerHTML = history.join('\n\n');
-            }
-
-            // Save and Load Functions
-            function saveStory() {
-                if (storyParts.length === 0) {
-                    alert('Please add at least one part to the story before saving.');
-                    return;
+        document.querySelectorAll('.choice-input, .next-part-select').forEach(element => {
+            element.addEventListener('change', (e) => {
+                const partIndex = parseInt(e.target.dataset.part);
+                const choiceIndex = parseInt(e.target.dataset.choice);
+                if (e.target.classList.contains('choice-input')) {
+                    storyParts[partIndex].choices[choiceIndex].text = e.target.value;
+                } else {
+                    storyParts[partIndex].choices[choiceIndex].nextPart = parseInt(e.target.value);
                 }
-                const storyData = JSON.stringify(storyParts);
-                const blob = new Blob([storyData], {type: 'application/json'});
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'my_interactive_story.json';
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-                alert('Story saved successfully!');
-            }
+            });
+        });
 
-            function loadStory(event) {
-                const file = event.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        try {
-                            storyParts = JSON.parse(e.target.result);
-                            updateStoryStructure();
-                            currentPart = 0;
-                            history = [];
-                            updateStory();
-                            alert('Story loaded successfully!');
-                        } catch (error) {
-                            alert('Error loading story. Please make sure you selected a valid story file.');
-                        }
-                    };
-                    reader.readAsText(file);
+        document.querySelectorAll('.remove-choice-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const partIndex = parseInt(e.target.dataset.part);
+                const choiceIndex = parseInt(e.target.dataset.choice);
+                storyParts[partIndex].choices.splice(choiceIndex, 1);
+                updateStoryStructure();
+            });
+        });
+
+        document.querySelectorAll('.remove-part-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const partIndex = parseInt(e.target.dataset.part);
+                storyParts.splice(partIndex, 1);
+                updateStoryStructure();
+            });
+        });
+    }
+
+    function updateStory() {
+        const part = storyParts[currentPart];
+        storyText.innerHTML = part.text;
+        choicesContainer.innerHTML = part.choices.map((choice, index) => `
+            <button class="btn choice-btn" data-choice="${index}">${choice.text}</button>
+        `).join('');
+
+        document.querySelectorAll('.choice-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const choiceIndex = parseInt(e.target.dataset.choice);
+                history.push(`${part.text} (Choice: ${part.choices[choiceIndex].text})`);
+                updateHistory();
+                currentPart = part.choices[choiceIndex].nextPart;
+                if (currentPart < storyParts.length) {
+                    updateStory();
+                } else {
+                    endStory();
                 }
-            }
+            });
+        });
 
-            function resetStory() {
-    if (confirm('Are you sure you want to reset the story? This action cannot be undone.')) {
-        storyParts = [{ text: 'Start your story here...', choices: [] }];
+        updateProgress();
+    }
+
+    function updateProgress() {
+        const progress = ((currentPart + 1) / storyParts.length) * 100;
+        progressBar.style.width = `${progress}%`;
+        progressText.textContent = `Part ${currentPart + 1} of ${storyParts.length}`;
+    }
+
+    function updateHistory() {
+        historyText.innerHTML = history.map((item, index) => 
+            `<p><strong>Interaction ${index + 1}:</strong> ${item}</p>`
+        ).join('');
+    }
+
+    function endStory() {
+        storyText.style.display = 'none';
+        choicesContainer.style.display = 'none';
+        finalStory.style.display = 'block';
+        finalStory.innerHTML = history.join('\n\n');
+    }
+
+    function saveStory() {
+        if (storyParts.length === 0) {
+            alert('Please add at least one part to the story before saving.');
+            return;
+        }
+        const storyData = JSON.stringify(storyParts);
+        const blob = new Blob([storyData], {type: 'application/json'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'my_interactive_story.json';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        alert('Story saved successfully!');
+    }
+
+    function loadStory(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    storyParts = JSON.parse(e.target.result);
+                    updateStoryStructure();
+                    resetPlayMode();
+                    alert('Story loaded successfully!');
+                } catch (error) {
+                    alert('Error loading story. Please make sure you selected a valid story file.');
+                }
+            };
+            reader.readAsText(file);
+        }
+    }
+
+    function resetStory() {
+        if (confirm('Are you sure you want to reset the story? This action cannot be undone.')) {
+            storyParts = [{ text: '', choices: [] }];
+            updateStoryStructure();
+            resetPlayMode();
+        }
+    }
+
+    function resetPlayMode() {
         currentPart = 0;
-        history = []; // Clear the history array
-        updateStoryStructure();
+        history = [];
         updateStory();
-        updateHistory(); // Update the history display
-        
-        // Reset the progress bar and text
+        updateHistory();
         progressBar.style.width = '0%';
         progressText.textContent = 'Part 1';
-        
-        // Clear the final story display if it's visible
         finalStory.style.display = 'none';
-        finalStory.innerHTML = '';
-        
-        // Show the story text and choices containers again
         storyText.style.display = 'block';
         choicesContainer.style.display = 'block';
     }
-}
 
-            // Event Listeners
-            modeToggle.addEventListener('click', () => {
-                if (creatorMode.classList.contains('hidden')) {
-                    creatorMode.classList.remove('hidden');
-                    playerMode.classList.add('hidden');
-                    modeToggle.textContent = 'Switch to Play Mode';
-                } else {
-                    creatorMode.classList.add('hidden');
-                    playerMode.classList.remove('hidden');
-                    modeToggle.textContent = 'Switch to Creator Mode';
-                    currentPart = 0;
-                    history = [];
-                    updateStory();
-                }
-            });
+    function toggleProgress() {
+        if (progressContainer.style.display === 'none') {
+            progressContainer.style.display = 'block';
+            toggleProgressBtn.textContent = 'Hide Progress';
+        } else {
+            progressContainer.style.display = 'none';
+            toggleProgressBtn.textContent = 'Show Progress';
+        }
+    }
 
-            addPartBtn.addEventListener('click', addStoryPart);
-            saveStoryBtn.addEventListener('click', saveStory);
-            resetBtn.addEventListener('click', resetStory);
-            shareBtn.addEventListener('click', saveStory);  // Share is the same as Save in this context
-            loadBtn.addEventListener('click', () => fileInput.click());
-            fileInput.addEventListener('change', loadStory);
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        darkModeToggle.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌒';
+        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+    }
 
-            // Initialize
-            storyParts = [{ text: '', choices: [] }];
+    // Event Listeners
+    modeToggle.addEventListener('click', () => {
+        creatorMode.classList.toggle('hidden');
+        playerMode.classList.toggle('hidden');
+        modeToggle.textContent = creatorMode.classList.contains('hidden') ? 'Switch to Creator Mode' : 'Switch to Play Mode';
+        if (!creatorMode.classList.contains('hidden')) {
+            updateStoryStructure();
+        } else {
+            resetPlayMode();
+        }
+    });
+
+    addPartBtn.addEventListener('click', () => {
+        storyParts.push({ text: '', choices: [] });
+        updateStoryStructure();
+    });
+
+    saveBtn.addEventListener('click', saveStory);
+    resetBtn.addEventListener('click', resetStory);
+    loadBtn.addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', loadStory);
+    toggleProgressBtn.addEventListener('click', toggleProgress);
+    replayBtn.addEventListener('click', resetPlayMode);
+    darkModeToggle.addEventListener('click', toggleDarkMode);
+
+    // Initialize
     updateStoryStructure();
     updateStory();
-    document.querySelector('.part-text').placeholder = 'Start your story here...';
-        });
-        const authorLink = document.getElementById('author-link');
-        const authorPreview = document.getElementById('author-preview');
 
-        authorLink.addEventListener('mouseenter', () => {
-            authorPreview.style.display = 'block';
-        });
-
-        authorLink.addEventListener('mouseleave', (e) => {
-            setTimeout(() => {
-                if (!authorPreview.matches(':hover')) {
-                    authorPreview.style.display = 'none';
-                }
-            }, 300);
-        });
-
-        authorPreview.addEventListener('mouseleave', () => {
-            authorPreview.style.display = 'none';
-        });
-        document.addEventListener('DOMContentLoaded', function() {
-            // ... (existing JavaScript code) ...
-
-            const darkModeToggle = document.getElementById('dark-mode-toggle');
-            const body = document.body;
-
-            darkModeToggle.addEventListener('click', () => {
-                body.classList.toggle('dark-mode');
-                darkModeToggle.textContent = body.classList.contains('dark-mode') ? '☀️' : '🌒';
-                localStorage.setItem('darkMode', body.classList.contains('dark-mode'));
-            });
-
-            // Check for saved dark mode preference
-            if (localStorage.getItem('darkMode') === 'true') {
-                body.classList.add('dark-mode');
-                darkModeToggle.textContent = '☀️';
-            } else {
-                darkModeToggle.textContent = '🌒';
-            }
-
-            // ... (rest of the JavaScript code) ...
-        });
+    // Check for saved dark mode preference
+    if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+        darkModeToggle.textContent = '☀️';
+    }
+});
 </script>
     </script>
 </body>
