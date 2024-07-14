@@ -3,425 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="author" content="Piyush Bhardwaj">
-    <title>TaleScaper</title>
-    <link rel="icon" href="images.png">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
-        :root {
-            --background-primary: rgba(255, 255, 255, 0.8);
-            --background-secondary: rgba(242, 243, 245, 0.9);
-            --text-normal: #2e3338;
-            --text-muted: #747f8d;
-            --interactive-normal: #4f545c;
-            --interactive-hover: #2e3338;
-            --interactive-active: #060607;
-            --background-modifier-hover: rgba(79,84,92,0.16);
-            --background-modifier-active: rgba(79,84,92,0.24);
-            --background-modifier-selected: rgba(79,84,92,0.32);
-            --background-modifier-accent: hsla(0,0%,100%,0.06);
-            --brand-experiment: #5865f2;
-            --brand-experiment-560: #4752c4;
-            --progress-bar-color: #caced6;
-        }
-
-        .dark-mode {
-            --background-primary: rgba(54, 57, 63, 0.9);
-            --background-secondary: rgba(47, 49, 54, 0.9);
-            --text-normal: #dcddde;
-            --text-muted: #72767d;
-            --interactive-normal: #b9bbbe;
-            --interactive-hover: #dcddde;
-            --interactive-active: #fff;
-            --background-modifier-hover: rgba(79,84,92,0.16);
-            --background-modifier-active: rgba(79,84,92,0.24);
-            --background-modifier-selected: rgba(79,84,92,0.32);
-            --background-modifier-accent: hsla(0,0%,100%,0.06);
-            --brand-experiment: #5865f2;
-            --brand-experiment-560: #4752c4;
-            --progress-bar-color: #4f545c;
-        }
-        body, html {
-            height: 100%;
-            margin: 0;
-            font-family: 'Poppins', sans-serif;
-            line-height: 1.6;
-            color: var(--text-normal);
-            background-color: var(--background-secondary);
-            overflow-x: hidden;
-            transition: background-color 0.3s, color 0.3s;
-        }
-        .parallax {
-            height: auto;
-            min-height: 100vh;
-            overflow-x: hidden;
-            overflow-y: visible;
-            perspective: 1px;
-        }
-
-        .parallax__layer {
-            position: fixed;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            transition: background 0.3s;
-        }
-
-        .parallax__layer--back {
-            transform: translateZ(-1px) scale(2);
-            background: linear-gradient(135deg, #3498db, #2980b9, #2c3e50);
-        }
-
-        .dark-mode .parallax__layer--back {
-            background: linear-gradient(135deg, #1a237e, #0d47a1, #01579b);
-         }
-
-        .parallax__layer--base {
-            transform: translateZ(0);
-            position: relative;
-        }
-
-        .content-wrapper {
-        position: relative;
-        z-index: 1;
-        }
-
-        .content {
-    position: relative;
-    max-width: 1000px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: var(--background-primary);
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s, box-shadow 0.3s;
-    backdrop-filter: blur(10px);
-}
-
-        #main-container {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-        #story-container, #history-container, #story-structure {
-    background-color: var(--background-secondary);
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-        #story-container {
-            flex: 2;
-        }
-        #history-container, #story-structure {
-            flex: 1;
-            max-height: 600px;
-            overflow-y: auto;
-        }
-        #story-text, #history-text {
-            margin-bottom: 20px;
-            color: var(--text-normal);
-        }
-        .btn {
-    padding: 8px 16px;
-    margin: 5px;
-    background-color: rgba(83, 138, 201, 0.7);  /* Lighter and translucent */
-    color: #ffffff;
-    border: none;
-    border-radius: 20px;  /* Circular edges */
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 600;
-    font-size: 0.9em;
-    backdrop-filter: blur(5px);  /* Adds a blur effect for translucency */
-}
-.btn:hover {
-    background-color: rgba(83, 138, 201, 0.8);  /* Slightly darker on hover */
-}
-
-
-.btn:active {
-    transform: translateY(1px);
-}
-
-        #mode-toggle, #reset-btn, #share-btn, #load-btn {
-            position: static;
-            display: inline-block;
-            margin-right: 10px;
-            margin-bottom: 10px;
-        }
-
-        #progress-bar {
-            width: 100%;
-            height: 8px;
-            background-color: var(--background-modifier-accent);
-            border-radius: 4px;
-            margin-bottom: 20px;
-            overflow: hidden;
-        }
-
-        #progress {
-            width: 0;
-            height: 100%;
-            background-color: var(--progress-bar-color);
-            border-radius: 4px;
-            transition: width 0.5s;
-        }
-
-        #progress-text {
-            text-align: center;
-            margin-top: 5px;
-            color: var(--text-muted);
-        }
-
-        #final-story {
-            display: none;
-            white-space: pre-wrap;
-        }
-        #file-input {
-            display: none;
-        }
-        .hidden {
-            display: none;
-        }
-        .part-text, .choice-input {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--background-secondary);
-            color: var(--text-normal);
-            border: 1px solid var(--background-modifier-accent);
-            border-radius: 4px;
-            resize: vertical;
-        }
-        .part-text {
-            height: 100px;
-        }
-        .next-part-select {
-            width: 100%;
-            padding: 8px;
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--background-secondary);
-            color: var(--text-normal);
-            border: 1px solid var(--background-modifier-accent);
-            border-radius: 4px;
-        }
-        h1, h2, h3 {
-            color: var(--text-normal);
-        }
-        h1 {
-            text-align: center;
-            font-size: 2.5em;
-            font-weight: bold;
-            color: #2c3e50;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-            margin: 0;
-        }
-
-        .title-container {
-            position: relative;
-            text-align: center;
-            margin-top: 20px;
-            margin-bottom: 30px;
-        }
-
-        .author {
-            font-size: 0.8em;
-            color: #555;
-            font-style: italic;
-            text-decoration: none;
-            display: block;
-            margin-top: 10px;
-        }
-
-        .author:hover {
-            text-decoration: underline;
-        }
-
-        .author-preview {
-            display: none;
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: white;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 15px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            z-index: 1000;
-            width: 250px;
-            text-align: left;
-        }
-
-        .author-preview h3 {
-            margin-top: 0;
-        }
-        p {
-            font-size: 13px;
-        }
-        .reload {
-            text-emphasis: none;
-        }
-        .reload:hover {
-            opacity: 0.7;
-        }
-        .reload:active {
-            cursor:-webkit-grab;
-        }
-
-        @media (min-width: 768px) {
-            #main-container {
-                flex-direction: row;
-            }
-            .author {
-                position: absolute;
-                right: 0;
-                top: 50%;
-                transform: translateY(-50%);
-                margin-top: 0;
-            }
-            .author-preview {
-                right: 0;
-                left: auto;
-                top: 100%;
-                transform: none;
-            }
-        }
-        .dark-mode-btn {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            z-index: 1000;
-            transition: transform 0.3s ease;
-        }
-
-        .dark-mode-btn:hover {
-            transform: scale(1.1);
-        }
-        @media (min-width: 768px) {
-            #main-container {
-                flex-direction: row;
-            }
-        }
-
-        body.dark-mode {
-    background-color: #1a1a1a;
-    color: #f0f0f0;
-}
-
-body.dark-mode .content {
-    background-color: rgba(40, 40, 40, 0.8);
-    box-shadow: 0 4px 6px rgba(255, 255, 255, 0.1);
-}
-
-        body.dark-mode .btn {
-            background-color: #4a4a4a;
-        }
-
-        body.dark-mode .parallax__layer--back {
-            background: linear-gradient(135deg, #1a237e, #0d47a1, #01579b);
-        }
-
-        body.dark-mode .parallax__layer--back::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: 
-        radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
-        radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px),
-        radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 40px),
-        radial-gradient(rgba(255,255,255,.4), rgba(255,255,255,.1) 2px, transparent 30px);
-    background-size: 550px 550px, 350px 350px, 250px 250px, 150px 150px; 
-    background-position: 0 0, 40px 60px, 130px 270px, 70px 100px;
-    opacity: 0.1;
-}
-
-        body.dark-mode h1, body.dark-mode h2, body.dark-mode h3 {
-            color: #f0f0f0;
-        }
-
-        body.dark-mode .author-preview {
-            background-color: #2a2a2a;
-            color: #f0f0f0;
-            border-color: #444;
-        }
-    }
-    body.dark-mode .btn {
-    background-color: rgba(74, 74, 74, 0.7);  /* Lighter and translucent for dark mode */
-}
-
-body.dark-mode .btn:hover {
-    background-color: rgba(90, 90, 90, 0.8);  /* Slightly darker on hover in dark mode */
-}
-.player-controls {
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        #toggle-progress {
-            font-size: 0.9em;
-            color: var(--interactive-normal);
-            cursor: pointer;
-            margin-right: 10px;
-            transition: color 0.3s ease;
-        }
-
-        #toggle-progress:hover {
-            color: var(--interactive-hover);
-        }
-
-        #replay-story {
-            background-color: rgba(66, 86, 212, 0.5);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 1em;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        #replay-story:hover {
-            background-color: rgba(66, 87s, 213, 0.65);
-        }
-
-        #replay-story:active {
-            transform: scale(0.95);
-        }
-
-        .dark-mode #toggle-progress {
-            color: var(--interactive-normal);
-        }
-
-        .dark-mode #toggle-progress:hover {
-            color: var(--interactive-hover);
-        }
-
-        .dark-mode #replay-story {
-            background-color: rgba(28, 48, 121, 0.5);
-        }
-
-        .dark-mode #replay-story:hover {
-            background-color: rgba(63, 95, 211, 0.4);
-        }
-
-    </style>
+    <title>Talescaper</title>
+    <link rel="stylesheet" href="stylesheet.css">
+    <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-firestore.js"></script>
 </head>
 <body>
     <div class="parallax">
@@ -429,310 +14,132 @@ body.dark-mode .btn:hover {
         <div class="parallax__layer parallax__layer--base">
             <div class="content-wrapper">
                 <div class="content">
-                    <div class="title-container">
-                        <h1>TaleScaper<a class="reload" href="https://cybergeek121.github.io/Talescaper/" style="color: #2980b9; text-decoration: none;">.</a></h1>
-                        <h2> Try <a class="reload" href="https://cybergeek121.github.io/Talescaper/" style="color: Red; text-decoration: none;">Clicking Here</a> for better version of this page.</h2>
-                        <a href="#" class="author" id="author-link">~by Piyush Bhardwaj</a>
-                        <div class="author-preview" id="author-preview">
-                            <h3>About Piyush Bhardwaj</h3>
-                            <p>A 15 year old developer. With the help of this page, you can create complex non-linear stories with limitless possibilities. This page was made through numerous iterations with the help of AI. It may be overwhelming currently, but updates are on the way.</p>
-                            <p>GitHub: <a href="https://github.com/CyberGeek121" target="_blank">github.com/CyberGeek121</a></p>
-                        </div>
-                    </div>
-                    <div>
-                        <button id="mode-toggle" class="btn">Switch to Play Mode</button>
-                        <button id="reset-btn" class="btn">Reset</button>
-                        <button id="save-btn" class="btn">Save</button>
-                        <button id="load-btn" class="btn">Load</button>
-                        <button id="dark-mode-toggle" class="dark-mode-btn">🌙</button>
-                        <input type="file" id="file-input" accept=".json">
-                    </div>
-                    
-                    <div id="creator-mode">
-                        <h2>Story Creator Mode</h2>
-                        <div id="story-structure"></div>
-                        <button id="add-part-btn" class="btn">Add New Part</button>
-                    </div>
-
-                    <div id="player-mode" class="hidden">
-                        <h2>Story Player Mode</h2>
-                        <div class="player-controls">
-                            <span id="toggle-progress">Show Progress</span>
-                            <button id="replay-story" title="Replay Story">↺</button>
-                        </div>
-                        <div id="main-container">
-                            <div id="story-container">
-                                <div id="progress-container" style="display: none;">
-                                    <div id="progress-bar"><div id="progress"></div></div>
-                                    <div id="progress-text">Part 1</div>
+                    <header>
+                        <div class="title-container">
+                            <h1>TaleScaper<a class="reload" href="Simulation.html" style="color: #2980b9; text-decoration: none;" title="Click here for Fun Simulation">.</a></h1>
+                            <div class="author-container">
+                                <a href="#" class="author" id="author-link">~by Piyush Bhardwaj</a>
+                                <div class="author-preview" id="author-preview">
+                                    <h3>About This Page</h3>
+                                    <p>Made by 15 year old developer. With the help of this page, you can create complex non-linear stories with limitless possibilities. This page was made through numerous iterations with the help of AI. It may be overwhelming currently, but updates are on the way.</p>
+                                    <p>GitHub: <a href="https://github.com/CyberGeek121" target="_blank" style="color: rgba(31, 118, 194, 0.796);">github.com/CyberGeek121</a></p>
                                 </div>
-                                <div id="story-text"></div>
-                                <div id="choices"></div>
-                                <div id="final-story"></div>
-                            </div>
-                            <div id="history-container">
-                                <h3>Interaction History</h3>
-                                <div id="history-text"></div>
                             </div>
                         </div>
+                        <!-- Add this just after the title-container div in your index.html file -->
+                        <div class="menu-container">
+                            <button id="menu-toggle" class="menu-toggle">&#8942;</button>
+                            <div id="dropdown-menu" class="dropdown-menu">
+                                <a href="Tutorial.html" class="menu-button">Tutorial</a>
+                                <a href="#" class="menu-button" id="chat-toggle">Chat</a> <!-- New Chat Button -->
+                            </div>
                         </div>
-                    </div>
+                        <div class="chat-container hidden"> <!-- Add hidden class to hide it initially -->
+                            <div class="chat-header">
+                                <h2>Chat</h2>
+                                <button id="close-chat">&#10005;</button>
+                            </div>
+                            <div id="chat-box"></div>
+                            <div class="chat-input-container">
+                                <input type="text" id="chat-input" placeholder="Type a message...">
+                                <button id="send-button">Send</button>
+                            </div>
+                        </div>
+                        <div class="controls">
+                            <button id="mode-toggle" class="btn">Switch to Play Mode</button>
+                            <button id="reset-btn" class="btn">Reset</button>
+                            <button id="save-btn" class="btn">Save</button>
+                            <button id="load-btn" class="btn">Load</button>
+                            <input type="file" id="file-input" accept=".json" style="display: none;">
+                        </div>
+                    
+                        <button id="dark-mode-toggle" class="dark-mode-btn">🌙</button>
+                    </header>
+                    
+                    <main>
+                        <div id="creator-mode">
+                            <h2>Story Creator Mode</h2>
+                            <div id="story-structure">
+                                <!-- Story parts will be dynamically added here -->
+                            </div>
+                            <button id="add-part-btn" class="btn">Add New Part</button>
+                        </div>
+                        
+                        <div id="player-mode" class="hidden">
+                            <h2>Story Player Mode</h2>
+                            <div class="player-controls">
+                                <span id="toggle-progress">Show Progress</span>
+                                <button id="replay-story" title="Replay Story">↺</button>
+                            </div>
+                            <div id="main-container">
+                                <div id="story-container">
+                                    <div id="progress-container" style="display: none;">
+                                        <div id="progress-bar"><div id="progress"></div></div>
+                                        <div id="progress-text">Part 1</div>
+                                    </div>
+                                    <div id="story-text"></div>
+                                    <div id="choices"></div>
+                                    <div id="final-story"></div>
+                                </div>
+                                <div id="history-container">
+                                    <h3>Interaction History</h3>
+                                    <div id="history-text"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </main>
                 </div>
             </div>
         </div>
     </div>
 
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-    // DOM Elements
-    const modeToggle = document.getElementById('mode-toggle');
-    const creatorMode = document.getElementById('creator-mode');
-    const playerMode = document.getElementById('player-mode');
-    const storyStructure = document.getElementById('story-structure');
-    const addPartBtn = document.getElementById('add-part-btn');
-    const saveBtn = document.getElementById('save-btn');
-    const storyText = document.getElementById('story-text');
-    const choicesContainer = document.getElementById('choices');
-    const progressBar = document.getElementById('progress');
-    const progressText = document.getElementById('progress-text');
-    const finalStory = document.getElementById('final-story');
-    const historyText = document.getElementById('history-text');
-    const resetBtn = document.getElementById('reset-btn');
-    const loadBtn = document.getElementById('load-btn');
-    const fileInput = document.getElementById('file-input');
-    const darkModeToggle = document.getElementById('dark-mode-toggle');
-    const toggleProgressBtn = document.getElementById('toggle-progress');
-    const progressContainer = document.getElementById('progress-container');
-    const replayBtn = document.getElementById('replay-story');
-
-    // State
-    let storyParts = [{ text: '', choices: [] }];
-    let currentPart = 0;
-    let history = [];
-
-    // Functions
-    function updateStoryStructure() {
-        storyStructure.innerHTML = storyParts.map((part, index) => `
-            <div class="story-part">
-                <h3>Part ${index + 1}</h3>
-                <textarea class="part-text" placeholder="Enter your story part here...">${part.text}</textarea>
-                <div class="choices">
-                    ${part.choices.map((choice, choiceIndex) => `
-                        <div class="choice">
-                            <input type="text" class="choice-input" placeholder="Enter choice text" value="${choice.text}" data-part="${index}" data-choice="${choiceIndex}">
-                            <select class="next-part-select" data-part="${index}" data-choice="${choiceIndex}">
-                                ${storyParts.map((_, i) => `<option value="${i}" ${i === choice.nextPart ? 'selected' : ''}>Part ${i + 1}</option>`).join('')}
-                            </select>
-                            <button class="remove-choice-btn btn" data-part="${index}" data-choice="${choiceIndex}">Remove Choice</button>
-                        </div>
-                    `).join('')}
-                </div>
-                <button class="add-choice-btn btn" data-part="${index}">Add Choice</button>
-                <button class="remove-part-btn btn" data-part="${index}">Remove Part</button>
+    <!-- Template for story part (hidden, used by JavaScript) -->
+    <div class="story-part">
+        <h3>
+            <span class="part-name">Part 1</span>
+            <button class="edit-part-name" data-part="${index}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                </svg>
+            </button>
+        </h3>
+            <textarea class="part-text" placeholder="Enter your story part here..."></textarea>
+            <div class="choices">
+                <!-- Choices will be dynamically added here -->
             </div>
-        `).join('');
-
-        addStoryPartEventListeners();
-    }
-
-    function addStoryPartEventListeners() {
-        document.querySelectorAll('.part-text').forEach(textarea => {
-            textarea.addEventListener('change', (e) => {
-                const partIndex = Array.from(storyStructure.children).indexOf(e.target.closest('.story-part'));
-                storyParts[partIndex].text = e.target.value;
-            });
-        });
-
-        document.querySelectorAll('.add-choice-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const partIndex = parseInt(e.target.dataset.part);
-                storyParts[partIndex].choices.push({ text: '', nextPart: partIndex });
-                updateStoryStructure();
-            });
-        });
-
-        document.querySelectorAll('.choice-input, .next-part-select').forEach(element => {
-            element.addEventListener('change', (e) => {
-                const partIndex = parseInt(e.target.dataset.part);
-                const choiceIndex = parseInt(e.target.dataset.choice);
-                if (e.target.classList.contains('choice-input')) {
-                    storyParts[partIndex].choices[choiceIndex].text = e.target.value;
-                } else {
-                    storyParts[partIndex].choices[choiceIndex].nextPart = parseInt(e.target.value);
-                }
-            });
-        });
-
-        document.querySelectorAll('.remove-choice-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const partIndex = parseInt(e.target.dataset.part);
-                const choiceIndex = parseInt(e.target.dataset.choice);
-                storyParts[partIndex].choices.splice(choiceIndex, 1);
-                updateStoryStructure();
-            });
-        });
-
-        document.querySelectorAll('.remove-part-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const partIndex = parseInt(e.target.dataset.part);
-                storyParts.splice(partIndex, 1);
-                updateStoryStructure();
-            });
-        });
-    }
-
-    function updateStory() {
-        const part = storyParts[currentPart];
-        storyText.innerHTML = part.text;
-        choicesContainer.innerHTML = part.choices.map((choice, index) => `
-            <button class="btn choice-btn" data-choice="${index}">${choice.text}</button>
-        `).join('');
-
-        document.querySelectorAll('.choice-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const choiceIndex = parseInt(e.target.dataset.choice);
-                history.push(`${part.text} (Choice: ${part.choices[choiceIndex].text})`);
-                updateHistory();
-                currentPart = part.choices[choiceIndex].nextPart;
-                if (currentPart < storyParts.length) {
-                    updateStory();
-                } else {
-                    endStory();
-                }
-            });
-        });
-
-        updateProgress();
-    }
-
-    function updateProgress() {
-        const progress = ((currentPart + 1) / storyParts.length) * 100;
-        progressBar.style.width = `${progress}%`;
-        progressText.textContent = `Part ${currentPart + 1} of ${storyParts.length}`;
-    }
-
-    function updateHistory() {
-        historyText.innerHTML = history.map((item, index) => 
-            `<p><strong>Interaction ${index + 1}:</strong> ${item}</p>`
-        ).join('');
-    }
-
-    function endStory() {
-        storyText.style.display = 'none';
-        choicesContainer.style.display = 'none';
-        finalStory.style.display = 'block';
-        finalStory.innerHTML = history.join('\n\n');
-    }
-
-    function saveStory() {
-        if (storyParts.length === 0) {
-            alert('Please add at least one part to the story before saving.');
-            return;
-        }
-        const storyData = JSON.stringify(storyParts);
-        const blob = new Blob([storyData], {type: 'application/json'});
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'my_interactive_story.json';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-        alert('Story saved successfully!');
-    }
-
-    function loadStory(event) {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    storyParts = JSON.parse(e.target.result);
-                    updateStoryStructure();
-                    resetPlayMode();
-                    alert('Story loaded successfully!');
-                } catch (error) {
-                    alert('Error loading story. Please make sure you selected a valid story file.');
-                }
-            };
-            reader.readAsText(file);
-        }
-    }
-
-    function resetStory() {
-        if (confirm('Are you sure you want to reset the story? This action cannot be undone.')) {
-            storyParts = [{ text: '', choices: [] }];
-            updateStoryStructure();
-            resetPlayMode();
-        }
-    }
-
-    function resetPlayMode() {
-        currentPart = 0;
-        history = [];
-        updateStory();
-        updateHistory();
-        progressBar.style.width = '0%';
-        progressText.textContent = 'Part 1';
-        finalStory.style.display = 'none';
-        storyText.style.display = 'block';
-        choicesContainer.style.display = 'block';
-    }
-
-    function toggleProgress() {
-        if (progressContainer.style.display === 'none') {
-            progressContainer.style.display = 'block';
-            toggleProgressBtn.textContent = 'Hide Progress';
-        } else {
-            progressContainer.style.display = 'none';
-            toggleProgressBtn.textContent = 'Show Progress';
-        }
-    }
-
-    function toggleDarkMode() {
-        document.body.classList.toggle('dark-mode');
-        darkModeToggle.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌒';
-        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
-    }
-
-    // Event Listeners
-    modeToggle.addEventListener('click', () => {
-        creatorMode.classList.toggle('hidden');
-        playerMode.classList.toggle('hidden');
-        modeToggle.textContent = creatorMode.classList.contains('hidden') ? 'Switch to Creator Mode' : 'Switch to Play Mode';
-        if (!creatorMode.classList.contains('hidden')) {
-            updateStoryStructure();
-        } else {
-            resetPlayMode();
-        }
-    });
-
-    addPartBtn.addEventListener('click', () => {
-        storyParts.push({ text: '', choices: [] });
-        updateStoryStructure();
-    });
-
-    saveBtn.addEventListener('click', saveStory);
-    resetBtn.addEventListener('click', resetStory);
-    loadBtn.addEventListener('click', () => fileInput.click());
-    fileInput.addEventListener('change', loadStory);
-    toggleProgressBtn.addEventListener('click', toggleProgress);
-    replayBtn.addEventListener('click', resetPlayMode);
-    darkModeToggle.addEventListener('click', toggleDarkMode);
-
-    // Initialize
-    updateStoryStructure();
-    updateStory();
-
-    // Check for saved dark mode preference
-    if (localStorage.getItem('darkMode') === 'true') {
-        document.body.classList.add('dark-mode');
-        darkModeToggle.textContent = '☀️';
-    }
-});
-</script>
+            <button class="add-choice-btn btn">Add Choice</button>
+            <button class="remove-part-btn btn">Remove Part</button>
+        </div>
+    </template>
+    <div class="chat-container hidden"> <!-- Add hidden class to hide it initially -->
+        <div class="chat-header">
+            <h2>Chat</h2>
+            <button id="close-chat">&#10005;</button>
+        </div>
+        <div id="chat-box"></div>
+        <div class="chat-input-container">
+            <input type="text" id="chat-input" placeholder="Type a message...">
+            <button id="send-button">Send</button>
+        </div>
+    </div>
+    <script>
+        
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyC27jarCCKwBZ9aa03EFDrXUNy2IdHxhRw",
+            authDomain: "talescaper0.firebaseapp.com",
+            databaseURL: "https://talescaper0-default-rtdb.firebaseio.com",
+            projectId: "talescaper0",
+            storageBucket: "talescaper0.appspot.com",
+            messagingSenderId: "747727807605",
+            appId: "1:747727807605:web:7f893017d0ea94d113c43c",
+            measurementId: "G-5D77TGW0R1"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        var db = firebase.firestore();
     </script>
+    <script src="script.js"></script>
 </body>
 </html>
