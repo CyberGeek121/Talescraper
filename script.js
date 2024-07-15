@@ -446,51 +446,60 @@ document.addEventListener('DOMContentLoaded', function() {
   document.addEventListener('DOMContentLoaded', function() {
     const chatToggle = document.getElementById('chat-toggle');
     const chatContainer = document.querySelector('.chat-container');
-    const chatBox = document.getElementById('chat-box');
-    const chatInput = document.getElementById('chat-input');
+    const closeChat = document.getElementById('close-chat');
     const sendButton = document.getElementById('send-button');
-    const closeChatButton = document.getElementById('close-chat');
+    const chatInput = document.getElementById('chat-input');
+    const chatBox = document.getElementById('chat-box');
 
-    function loadChatMessages() {
-        db.collection("messages").orderBy("timestamp")
-            .onSnapshot(snapshot => {
-                chatBox.innerHTML = "";
-                snapshot.forEach(doc => {
-                    const message = doc.data().message;
-                    chatBox.innerHTML += `<div class="chat-message">${message}</div>`;
-                });
-                chatBox.scrollTop = chatBox.scrollHeight;
-            });
-    }
-
-    function saveChatMessage(message) {
-        db.collection("messages").add({
-            message: message,
-            timestamp: firebase.firestore.FieldValue.serverTimestamp()
-        });
-    }
-
-    chatToggle.addEventListener('click', function() {
+    // Toggle chat visibility
+    chatToggle.addEventListener('click', () => {
         chatContainer.classList.toggle('hidden');
     });
 
-    closeChatButton.addEventListener('click', function() {
+    // Close chat
+    closeChat.addEventListener('click', () => {
         chatContainer.classList.add('hidden');
     });
 
-    sendButton.addEventListener('click', function() {
+    // Send message
+    sendButton.addEventListener('click', () => {
         const message = chatInput.value.trim();
         if (message) {
+            addMessageToChatBox('You', message);
             chatInput.value = '';
-            saveChatMessage(message);
+            db.collection('messages').add({
+                sender: 'You',
+                message: message,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(() => {
+                console.log('Message written to Firestore');
+            }).catch(error => {
+                console.error('Error writing message to Firestore: ', error);
+            });
         }
     });
 
-    chatInput.addEventListener('keypress', function(event) {
-        if (event.key === 'Enter') {
-            sendButton.click();
-        }
-    });
+    // Add message to chat box
+    function addMessageToChatBox(sender, message) {
+        const messageElement = document.createElement('div');
+        messageElement.classList.add('chat-message');
+        messageElement.innerHTML = `<strong>${sender}:</strong> ${message}`;
+        chatBox.appendChild(messageElement);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
 
-    loadChatMessages();
+    // Load messages from Firestore
+    function loadMessages() {
+        db.collection('messages').orderBy('timestamp').onSnapshot((snapshot) => {
+            chatBox.innerHTML = ''; // Clear the chat box before adding messages
+            snapshot.forEach((doc) => {
+                const data = doc.data();
+                addMessageToChatBox(data.sender, data.message);
+            });
+        }, error => {
+            console.error('Error fetching messages from Firestore: ', error);
+        });
+    }
+
+    loadMessages();
 });
